@@ -16,3 +16,14 @@
   font-size:1.5rem;
   font-weight:600;
 }
+
+.empty-feed{
+
+  text-align:center;
+
+  color:#94a3b8;
+
+  padding:40px;
+
+  font-size:18px;
+}

@@ -18,26 +18,40 @@ function Home() {
   const [posts, setPosts] =
     useState([]);
 
-  const fetchPosts =
-    async () => {
+ const fetchPosts =
+  async () => {
 
-      try {
+    try {
 
-        const res =
-          await API.get(
-            "/posts"
-          );
-
-        setPosts(
-          res.data
+      const res =
+        await API.get(
+          "/posts"
         );
 
-      } catch (error) {
+      const currentUser =
+        JSON.parse(
+          localStorage.getItem(
+            "user"
+          )
+        );
 
-        console.log(error);
+      const filteredPosts =
+        res.data.filter(
+          (post) =>
+            post.user?._id !==
+            currentUser._id
+        );
 
-      }
-    };
+      setPosts(
+        filteredPosts
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
 
   useEffect(() => {
 
@@ -59,19 +73,33 @@ function Home() {
         }
       />
 
-      {posts.map(
-        (post) => (
+      {
+  posts.length === 0 ? (
 
-          <PostCard
-            key={post._id}
-            post={post}
-            refreshPosts={
-              fetchPosts
-            }
-          />
+    <div
+      className="empty-feed"
+    >
+      No posts available
+    </div>
 
-        )
-      )}
+  ) : (
+
+    posts.map(
+      (post) => (
+
+        <PostCard
+          key={post._id}
+          post={post}
+          refreshPosts={
+            fetchPosts
+          }
+        />
+
+      )
+    )
+
+  )
+}
 
     </div>
 

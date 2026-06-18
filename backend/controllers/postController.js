@@ -102,6 +102,47 @@ exports.getPosts = async (
   }
 };
 
+exports.getUserPosts = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const posts =
+      await Post.find({
+        user:
+          req.params.id
+      })
+      .populate(
+  "user",
+  "username _id"
+)
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select:
+            "username"
+        }
+      })
+      .sort({
+        createdAt: -1
+      });
+
+    res.json(posts);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        "Failed to fetch user posts"
+    });
+
+  }
+
+};
+
 exports.deletePost = async (
   req,
   res

@@ -40,10 +40,18 @@
 }
 
 .username{
-  color:white;
+
   font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.3s;
 }
 
+.username:hover{
+
+  color:#38bdf8;
+}
 .post-caption{
   color:#F8FAFC;
   line-height:1.6;

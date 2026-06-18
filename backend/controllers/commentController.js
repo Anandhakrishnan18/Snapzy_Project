@@ -105,3 +105,38 @@ exports.deleteComment = async (
 
   }
 };
+
+exports.getMyComments = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const comments =
+      await Comment.find({
+        user:
+          req.user._id,
+      })
+      .populate(
+        "post",
+        "caption"
+      )
+      .sort({
+        createdAt: -1,
+      });
+
+    res.json(
+      comments
+    );
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        "Failed to fetch comments",
+    });
+
+  }
+
+};

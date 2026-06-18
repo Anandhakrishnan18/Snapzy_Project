@@ -13,13 +13,13 @@ const upload =
 const {
   createPost,
   getPosts,
+  getUserPosts,
   deletePost,
   likePost,
   unlikePost,
 } = require(
   "../controllers/postController"
 );
-
 
 router.post(
   "/",
@@ -31,6 +31,11 @@ router.post(
 );
 
 router.get("/", getPosts);
+
+router.get(
+  "/user/:id",
+  getUserPosts
+);
 
 router.delete(
   "/:id",

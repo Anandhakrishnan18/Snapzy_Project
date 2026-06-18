@@ -1,5 +1,6 @@
 import API from "../services/api";
 import CommentSection from "./CommentSection";
+import { useNavigate } from "react-router-dom";
 import "../styles/PostCard.css";
 import {
   formatDistanceToNow
@@ -9,6 +10,9 @@ function PostCard({
   post,
   refreshPosts
 }) {
+
+  const navigate =
+  useNavigate();
 
   const likePost = async () => {
 
@@ -79,11 +83,21 @@ function PostCard({
 
         <div>
 
-  <div className="username">
-    {
-      post.user?.username
-    }
-  </div>
+  <div
+  className="username"
+  onClick={() =>
+    navigate(
+      `/profile/${post.user?._id}`
+    )
+  }
+  style={{
+    cursor:"pointer"
+  }}
+>
+  {
+    post.user?.username
+  }
+</div>
 
   <div className="post-time">
 
