@@ -1,0 +1,54 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#0F172A;
+  color:#F8FAFC;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+button{
+  border:none;
+  outline:none;
+  cursor:pointer;
+  transition:.3s;
+}
+
+input,
+textarea{
+  outline:none;
+  border:none;
+  font-family:'Poppins',sans-serif;
+}
+
+.page-container{
+  width:100%;
+  min-height:100vh;
+  background:#0F172A;
+}
+
+.primary-btn{
+  background:var(--primary);
+  color:white;
+  padding:12px 20px;
+  border-radius:12px;
+  font-weight:600;
+}
+
+.primary-btn:hover{
+  background:var(--primary-hover);
+}
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}

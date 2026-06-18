@@ -1,0 +1,26 @@
+:root{
+
+  --bg-color:#0F172A;
+
+  --navbar:#111827;
+
+  --card:#1E293B;
+
+  --primary:#E1306C;
+
+  --primary-hover:#ff4d8b;
+
+  --text:#F8FAFC;
+
+  --secondary:#94A3B8;
+
+  --border:#334155;
+
+  --shadow:
+    0 8px 25px rgba(
+      0,
+      0,
+      0,
+      .25
+    );
+}

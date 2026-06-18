@@ -1,0 +1,18 @@
+.home-page{
+  min-height:100vh;
+  background:#0F172A;
+}
+
+.feed-container{
+  width:100%;
+  max-width:800px;
+  margin:30px auto;
+  padding:0 20px;
+}
+
+.feed-title{
+  color:white;
+  margin-bottom:20px;
+  font-size:1.5rem;
+  font-weight:600;
+}
