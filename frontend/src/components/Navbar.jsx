@@ -145,6 +145,16 @@ function Navbar() {
         </button>
 
         <button
+  onClick={() =>
+    navigate(
+      "/messages"
+    )
+  }
+>
+  Messages
+</button>
+
+        <button
           className="nav-btn"
           onClick={() => {
 

@@ -10,16 +10,23 @@ const {
   updateUser,
   followUser,
   unfollowUser,
-  searchUsers
+  searchUsers,
+  getFollowingUsers
 } = require(
   "../controllers/userController"
 );
-
 
 router.get(
   "/search/:username",
   searchUsers
 );
+
+router.get(
+  "/following/list",
+  protect,
+  getFollowingUsers
+);
+
 router.get("/:id", getUser);
 
 router.put(

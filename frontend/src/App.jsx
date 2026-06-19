@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Messages
+from "./pages/Messages";  
 
 function App() {
   return (
@@ -17,6 +19,13 @@ function App() {
         />
 
         <Route path="/home" element={<Home />} />
+
+        <Route
+  path="/messages"
+  element={
+    <Messages />
+  }
+/>
 
         <Route
           path="/profile/:id"
