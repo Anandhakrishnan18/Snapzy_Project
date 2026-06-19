@@ -740,16 +740,26 @@ useEffect(() => {
               )
             }
 
-            <button
-              className="profile-btn"
-              onClick={() =>
-                setEditMode(
-                  true
-                )
-              }
-            >
-              Edit Profile
-            </button>
+            {
+  JSON.parse(
+    localStorage.getItem(
+      "user"
+    )
+  )._id === id && (
+
+    <button
+      className="profile-btn"
+      onClick={() =>
+        setEditMode(
+          true
+        )
+      }
+    >
+      Edit Profile
+    </button>
+
+  )
+}
 
           </div>
 

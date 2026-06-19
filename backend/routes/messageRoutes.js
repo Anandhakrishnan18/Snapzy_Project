@@ -10,6 +10,7 @@ const protect =
 const {
   sendMessage,
   getMessages,
+  getMessagePreviews
 } = require(
   "../controllers/messageController"
 );
@@ -18,6 +19,12 @@ router.post(
   "/send",
   protect,
   sendMessage
+);
+
+router.get(
+  "/preview/list",
+  protect,
+  getMessagePreviews
 );
 
 router.get(

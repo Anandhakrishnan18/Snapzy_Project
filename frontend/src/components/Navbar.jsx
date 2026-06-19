@@ -145,13 +145,14 @@ function Navbar() {
         </button>
 
         <button
+  className="nav-btn"
   onClick={() =>
     navigate(
       "/messages"
     )
   }
 >
-  Messages
+  💬 Messages
 </button>
 
         <button

@@ -28,7 +28,13 @@ const messageSchema =
         required: true,
       },
 
+      isRead: {
+  type: Boolean,
+  default: false,
+},
+
     },
+
     {
       timestamps: true,
     }

@@ -87,6 +87,11 @@ app.use(
   )
 );
 
+
+const onlineUsers =
+  new Map();
+
+
 io.on(
   "connection",
   (socket) => {
@@ -94,6 +99,39 @@ io.on(
     console.log(
       "User Connected:",
       socket.id
+    );
+
+socket.on(
+  "userOnline",
+  (userId) => {
+
+    onlineUsers.set(
+      userId,
+      socket.id
+    );
+
+    io.emit(
+      "onlineUsers",
+      [
+        ...onlineUsers.keys()
+      ]
+    );
+
+  }
+);
+
+    socket.on(
+      "checkOnline",
+      (userId) => {
+
+        socket.emit(
+          "userStatus",
+          onlineUsers.has(
+            userId
+          )
+        );
+
+      }
     );
 
     socket.on(
@@ -111,6 +149,36 @@ io.on(
     socket.on(
       "disconnect",
       () => {
+
+        for (
+          const [
+            userId,
+            socketId
+          ]
+          of onlineUsers
+        ) {
+
+          if (
+            socketId ===
+            socket.id
+          ) {
+
+           onlineUsers.delete(
+  userId
+);
+
+io.emit(
+  "onlineUsers",
+  [
+    ...onlineUsers.keys()
+  ]
+);
+
+break;
+
+          }
+
+        }
 
         console.log(
           "User Disconnected:",

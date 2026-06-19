@@ -78,15 +78,32 @@ function CreatePost({ refreshPosts }) {
         }
       />
 
-      <input
-        type="file"
-        accept="image/*,video/*"
-        onChange={(e) =>
-          setMedia(
-            e.target.files[0]
-          )
-        }
-      />
+      <label
+  htmlFor="file-upload"
+  className="upload-btn"
+>
+  📷 Add Photo / Video
+</label>
+
+<input
+  id="file-upload"
+  type="file"
+  accept="image/*,video/*"
+  hidden
+  onChange={(e) =>
+    setMedia(
+      e.target.files[0]
+    )
+  }
+/>
+
+{
+  media && (
+    <p className="selected-file">
+      {media.name}
+    </p>
+  )
+}
 
       <div
         className="create-post-footer"

@@ -30,6 +30,18 @@ function Messages() {
     setText] =
     useState("");
 
+    const [previews,
+  setPreviews] =
+  useState([]);
+
+  const [isOnline,
+  setIsOnline] =
+  useState(false);
+
+  const [onlineUsers,
+  setOnlineUsers] =
+  useState([]);
+
 const chatEndRef =
   useRef(null);
 
@@ -64,6 +76,38 @@ const chatEndRef =
 
     };
 
+const fetchPreviews =
+  async () => {
+
+    try {
+
+      const res =
+        await API.get(
+          "/messages/preview/list",
+          {
+            headers: {
+              Authorization:
+                `Bearer ${localStorage.getItem(
+                  "token"
+                )}`
+            }
+          }
+        );
+
+      setPreviews(
+        res.data
+      );
+
+      
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
   const fetchMessages =
     async (userId) => {
 
@@ -85,6 +129,8 @@ const chatEndRef =
         setMessages(
           res.data
         );
+
+        fetchPreviews();
 
       } catch (error) {
 
@@ -146,8 +192,9 @@ useEffect(() => {
 
   fetchUsers();
 
-}, []);
+  fetchPreviews();
 
+}, []);
 
 useEffect(() => {
 
@@ -162,16 +209,23 @@ useEffect(() => {
 useEffect(() => {
 
   socket.on(
-  "connect",
-  () => {
+    "connect",
+    () => {
 
-    console.log(
-      "🔥 Socket Connected:",
-      socket.id
-    );
+      const currentUser =
+        JSON.parse(
+          localStorage.getItem(
+            "user"
+          )
+        );
 
-  }
-);
+      socket.emit(
+        "userOnline",
+        currentUser._id
+      );
+
+    }
+  );
 
   return () => {
 
@@ -209,6 +263,46 @@ useEffect(() => {
 
 }, []); 
 
+useEffect(() => {
+
+  if (
+    !selectedUser
+  ) return;
+
+  setIsOnline(
+    onlineUsers.includes(
+      selectedUser._id
+    )
+  );
+
+}, [
+  onlineUsers,
+  selectedUser
+]);
+
+useEffect(() => {
+
+  socket.on(
+    "onlineUsers",
+    (users) => {
+
+      setOnlineUsers(
+        users
+      );
+
+    }
+  );
+
+  return () => {
+
+    socket.off(
+      "onlineUsers"
+    );
+
+  };
+
+}, []);
+
   return (
 
     <div
@@ -220,39 +314,190 @@ useEffect(() => {
 
           <>
 
-            <h2>
-              Messages
-            </h2>
+           <h2 className="messages-title">
+  Messages
+</h2>
 
+<div className="users-list">
+
+  {
+  [...users]
+    .sort((a, b) => {
+
+      const aPreview =
+        previews.find(
+          (p) =>
+            p.userId ===
+            a._id
+        );
+
+      const bPreview =
+        previews.find(
+          (p) =>
+            p.userId ===
+            b._id
+        );
+
+      const aTime =
+        aPreview
+          ? new Date(
+              aPreview.createdAt
+            ).getTime()
+          : 0;
+
+      const bTime =
+        bPreview
+          ? new Date(
+              bPreview.createdAt
+            ).getTime()
+          : 0;
+
+      return (
+        bTime - aTime
+      );
+
+    })
+    .map(
+      (user) => (
+
+        <div
+          key={user._id}
+          className="message-user-card"
+         onClick={() => {
+
+  setSelectedUser(
+    user
+  );
+
+  fetchMessages(
+    user._id
+  );
+
+  fetchPreviews();
+
+}}
+        >
+
+          <div
+            className="user-avatar"
+          >
             {
-              users.map(
-                (user) => (
-
-                  <div
-                    key={user._id}
-                    className="message-user"
-                    onClick={() => {
-
-                      setSelectedUser(
-                        user
-                      );
-
-                      fetchMessages(
-                        user._id
-                      );
-
-                    }}
-                  >
-
-                    {
-                      user.username
-                    }
-
-                  </div>
-
-                )
-              )
+              user.username
+                .charAt(0)
+                .toUpperCase()
             }
+          </div>
+
+          <div
+            className="user-details"
+          >
+
+        <div
+  className="user-top-row"
+>
+
+  <h3>
+    {
+      user.username
+    }
+  </h3>
+
+  <small>
+
+{
+  previews.find(
+    (p) =>
+      p.userId ===
+      user._id
+  )?.createdAt
+    ? formatDistanceToNow(
+        new Date(
+          previews.find(
+            (p) =>
+              p.userId ===
+              user._id
+          ).createdAt
+        ),
+        {
+          addSuffix:false
+        }
+      )
+        .replace(
+          " minutes",
+          "m"
+        )
+        .replace(
+          " minute",
+          "m"
+        )
+        .replace(
+          " hours",
+          "h"
+        )
+        .replace(
+          " hour",
+          "h"
+        )
+        .replace(
+          " days",
+          "d"
+        )
+        .replace(
+          " day",
+          "d"
+        )
+    : ""
+}
+
+  </small>
+
+</div>
+
+            <p>
+
+{
+  previews.find(
+    (p) =>
+      p.userId ===
+      user._id
+  )?.lastMessage ||
+
+  "No messages yet"
+}
+
+</p>
+
+          </div>
+
+          {
+  previews.find(
+    (p) =>
+      p.userId ===
+      user._id
+  )?.unreadCount > 0 && (
+
+    <div
+      className="unread-dot"
+    >
+      {
+        previews.find(
+          (p) =>
+            p.userId ===
+            user._id
+        ).unreadCount
+      }
+    </div>
+
+  )
+}
+
+        </div>
+
+      )
+    )
+  }
+
+</div>
 
           </>
 
@@ -260,28 +505,13 @@ useEffect(() => {
 
           <>
 
-            <button
-              onClick={() => {
-
-                setSelectedUser(
-                  null
-                );
-
-                setMessages(
-                  []
-                );
-
-              }}
-            >
-              ← Back
-            </button>
-
-            <div
+            
+         <div
   className="chat-header"
 >
 
   <button
-    className="back-btn"
+    className="chat-back-btn"
     onClick={() => {
 
       setSelectedUser(
@@ -296,14 +526,20 @@ useEffect(() => {
   </button>
 
   <div
-    className="chat-avatar"
+    className="chat-user-info"
   >
-    {
-      selectedUser.username
-        .charAt(0)
-        .toUpperCase()
-    }
-  </div>
+
+    <div
+      className="chat-avatar"
+    >
+      {
+        selectedUser.username
+          .charAt(0)
+          .toUpperCase()
+      }
+    </div>
+
+    <div>
 
   <h2>
     {
@@ -311,7 +547,27 @@ useEffect(() => {
     }
   </h2>
 
+  <small
+    style={{
+      color:
+        isOnline
+          ? "#22c55e"
+          : "#ef4444"
+    }}
+  >
+    {
+      isOnline
+        ? "● Online"
+        : "● Offline"
+    }
+  </small>
+
 </div>
+
+  </div>
+
+</div>
+
             <div
               className="chat-box"
             >

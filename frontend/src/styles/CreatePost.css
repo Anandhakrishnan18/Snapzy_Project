@@ -66,3 +66,43 @@
 
   width:100%;
 }
+
+.upload-btn {
+
+  display: inline-block;
+
+  padding: 8px 14px;
+
+  background: #162544;
+
+  border: 1px solid #2f436f;
+
+  border-radius: 10px;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+
+}
+
+.upload-btn:hover {
+
+  background: #1d3159;
+
+}
+
+.selected-file {
+
+  margin-top: 10px;
+
+  color: #b8c3d9;
+
+  font-size: 14px;
+
+}
